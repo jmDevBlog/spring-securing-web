@@ -1,3 +1,4 @@
+
 package com.example.securingweb;
 
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity // 웹 보안 지원을 활성화하고 spring MVC통합 제공
@@ -19,8 +24,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll() // / 및 /home 경로는 인증이 필요하지 않음음
-               .anyRequest().authenticated()
+                .antMatchers("/", "/home","/h2-console/**").permitAll() // / 및 /home 경로는 인증이 필요하지 않음음
+                .anyRequest().authenticated()
+                .and()
+                .csrf().ignoringAntMatchers("/h2-console/**")
+                .and()
+                .headers()
+                .addHeaderWriter(
+                        new XFrameOptionsHeaderWriter(
+                                new WhiteListedAllowFromStrategy(Arrays.asList("localhost"))
+                        )
+                )
+                .frameOptions().sameOrigin()
                 .and()
                 .formLogin()// 사용자가 성공적으로 로그인하면 인증이 필요한 이전에 요청한 페이지로 리디렉션
                 .loginPage("/login") // 지정된 사용자 정의/ 로그인 페이지가 있으며 누구나 볼 수 있다.
