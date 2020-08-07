@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -27,8 +28,9 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username);
 
+        List<String> Role = Arrays.asList("Role_Member", "Role_Admin");
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.USER.toString()));
+        authorities.add(new SimpleGrantedAuthority(Role.get(0)));
 
         return new User(member.getUsername(), member.getPassword(), authorities);
     }

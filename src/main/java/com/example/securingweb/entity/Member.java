@@ -1,8 +1,10 @@
 package com.example.securingweb.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,4 +25,10 @@ public class Member {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
+
+    @Column
+    @CreationTimestamp
+    private LocalDateTime registerDate;
+
+
 }
