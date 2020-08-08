@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ResponseDataDTO {
+public class ResponseDataDto {
     private String code;
     private String status;
     private String message;

@@ -6,7 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="/js/login.js"></script>
 </head>
-<body>
+<body onkeydown="javascript:onEnterLogin();">
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
@@ -14,9 +14,11 @@
     You have been logged out.
 </div>
 
-<div><label> User Name : <input type="text" id="username" name="username"/> </label></div>
-<div><label> Password: <input type="password" id="password" name="password"/> </label></div>
-<div><input type="submit" value="Sign In" onclick="login()"/></div>
+<form name="loginForm" id="loginForm">
+    <div><label> User Name : <input type="text" id="username" name="username"/> </label></div>
+    <div><label> Password: <input type="password" id="password" name="password"/> </label></div>
+    <div><input type="button" value="Sign In" onclick="login()"/></div>
+</form>
 
 </body>
 </html>

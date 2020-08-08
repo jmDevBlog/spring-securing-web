@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.example.securingweb.dto.ResponseDataDTO;
+import com.example.securingweb.dto.ResponseDataDto;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         ObjectMapper mapper = new ObjectMapper();    //JSON 변경용
 
-        ResponseDataDTO responseDataDTO = new ResponseDataDTO();
+        ResponseDataDto responseDataDTO = new ResponseDataDto();
         responseDataDTO.setCode(ResponseDataCode.ERROR);
         responseDataDTO.setStatus(ResponseDataStatus.ERROR);
         responseDataDTO.setMessage("아이디 혹은 비밀번호가 일치하지 않습니다.");

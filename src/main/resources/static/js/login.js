@@ -1,18 +1,17 @@
-$(function () {
-    $("#btn-login").click(function () {
+function onEnterLogin() {
+    var keyCode = window.event.keyCode;
+
+    if (keyCode == 13) {
         login();
-    })
-})
+    }
+}
 
 function login() {
     $.ajax({
         url: "/login",
         type: "POST",
         dataType: "json",
-        data: {
-            username: $("#username").val(),
-            password: $("#password").val()
-        },
+        data: $('#loginForm').serialize(),
         success: function (response) {
             if (response.code == "200") {
                 // 정상 처리 된 경우
@@ -21,8 +20,8 @@ function login() {
                 alert(response.message);
             }
         },
-        error: function (a, b, c) {
-            console.log(a, b, c);
+        error: function (request, status, error) {
+            console.log(request, status, error);
         }
     })
 }

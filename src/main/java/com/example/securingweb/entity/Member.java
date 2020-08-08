@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 public class Member {
@@ -24,11 +23,20 @@ public class Member {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     @Column
     @CreationTimestamp
     private LocalDateTime registerDate;
 
+    @PrePersist
+    public void onPrePersist(){
+        role = Role.USER;
+    }
 
+    @Builder
+    public Member(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
 }

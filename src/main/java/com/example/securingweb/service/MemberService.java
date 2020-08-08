@@ -3,6 +3,8 @@ package com.example.securingweb.service;
 import com.example.securingweb.entity.Member;
 import com.example.securingweb.entity.Role;
 import com.example.securingweb.repository.MemberRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,15 +30,20 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username);
 
-        List<String> Role = Arrays.asList("Role_Member", "Role_Admin");
+        if (member.getUsername() == null) {
+            throw new UsernameNotFoundException(member.getUsername());
+        }
+
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.get(0)));
+        authorities.add(new SimpleGrantedAuthority(member.getRole().toString()));
 
         return new User(member.getUsername(), member.getPassword(), authorities);
     }
 
     public Member save(Member member) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return memberRepository.save(member);
+        return memberRepository.save(member.builder()
+                .username(member.getUsername())
+                .password(passwordEncoder.encode(member.getPassword()))
+                .build());
     }
 }
