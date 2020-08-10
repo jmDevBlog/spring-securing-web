@@ -1,7 +1,6 @@
 package com.example.securingweb.service;
 
 import com.example.securingweb.entity.Member;
-import com.example.securingweb.entity.Role;
 import com.example.securingweb.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,14 +26,21 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByUsername(username);
 
+        if (member.getUsername() == null) {
+            throw new UsernameNotFoundException(member.getUsername());
+        }
+
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.USER.toString()));
+        authorities.add(new SimpleGrantedAuthority(member.getRole().toString()));
 
         return new User(member.getUsername(), member.getPassword(), authorities);
     }
 
     public Member save(Member member) {
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        return memberRepository.save(member);
+        return memberRepository.save(member.builder()
+                .username(member.getUsername())
+                .password(passwordEncoder.encode(member.getPassword()))
+                .role(member.getRole())
+                .build());
     }
 }

@@ -1,9 +1,11 @@
 
-package com.example.securingweb;
+package com.example.securingweb.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -16,6 +18,11 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity // 웹 보안 지원을 활성화하고 spring MVC통합 제공
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     // 보안해야 할 URL 경로와 그렇지 않은 URL 경우 정의
     @Override
@@ -36,12 +43,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()// 사용자가 성공적으로 로그인하면 인증이 필요한 이전에 요청한 페이지로 리디렉션
                 .loginPage("/login") // 지정된 사용자 정의/ 로그인 페이지가 있으며 누구나 볼 수 있다.
+                .successHandler(customAuthenticationSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
                 .permitAll()
                 .and()
             .logout()
                 .permitAll()
                 .and()
             .csrf().disable();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**", "/js/**");
     }
 
     @Bean
