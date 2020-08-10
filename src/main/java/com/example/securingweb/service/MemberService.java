@@ -1,10 +1,7 @@
 package com.example.securingweb.service;
 
 import com.example.securingweb.entity.Member;
-import com.example.securingweb.entity.Role;
 import com.example.securingweb.repository.MemberRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,6 +40,7 @@ public class MemberService implements UserDetailsService {
         return memberRepository.save(member.builder()
                 .username(member.getUsername())
                 .password(passwordEncoder.encode(member.getPassword()))
+                .role(member.getRole())
                 .build());
     }
 }

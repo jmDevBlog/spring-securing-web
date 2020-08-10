@@ -1,6 +1,7 @@
 package com.example.securingweb.controller;
 
 import com.example.securingweb.entity.Member;
+import com.example.securingweb.entity.Role;
 import com.example.securingweb.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,7 @@ public class MemberController {
 
     @PostMapping("/create")
     public Member create(@RequestBody Member member) {
-        System.out.println(member.toString());
-
+        member.setRole(Role.USER);
         return memberService.save(member);
     }
 

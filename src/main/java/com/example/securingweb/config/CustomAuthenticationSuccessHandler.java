@@ -3,6 +3,7 @@ package com.example.securingweb.config;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,12 +35,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         RequestCache requestCache = new HttpSessionRequestCache();
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-        try {
-            request.getSession().setAttribute("prevPage", savedRequest.getRedirectUrl());
-        } catch (NullPointerException e){
-            request.getSession().setAttribute("prevPage", "/");
-        }
-
+        String redirectUrl = Optional.ofNullable(savedRequest).map(it -> it.getRedirectUrl()).orElse("/");
 
         ObjectMapper mapper = new ObjectMapper();    //JSON 변경용
 
@@ -47,10 +43,8 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         responseDataDto.setCode(ResponseDataCode.SUCCESS);
         responseDataDto.setStatus(ResponseDataStatus.SUCCESS);
 
-        String prevPage = request.getSession().getAttribute("prevPage").toString();    //이전 페이지 가져오기
-
         Map<String, String> items = new HashMap<String, String>();
-        items.put("url", prevPage);    // 이전 페이지 저장
+        items.put("url", redirectUrl);
         responseDataDto.setItem(items);
 
         response.setCharacterEncoding("UTF-8");

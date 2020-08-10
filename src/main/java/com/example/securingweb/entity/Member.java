@@ -1,7 +1,8 @@
 package com.example.securingweb.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class Member {
     @Id
@@ -18,25 +20,23 @@ public class Member {
     @Column(nullable = false)
     private String username;
 
+
     @Column(nullable = false)
     private String password;
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column
-    @CreationTimestamp
+    @CreatedDate
     private LocalDateTime registerDate;
 
-    @PrePersist
-    public void onPrePersist(){
-        role = Role.USER;
-    }
-
     @Builder
-    public Member(String username, String password){
+    public Member(String username, String password, Role role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 }
