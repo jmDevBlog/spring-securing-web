@@ -13,11 +13,13 @@ $(document).ready(function($){
 
             beforeSend: function(xhr, setting){
                 $button.attr('disabled', true);
+                //데이터를 전송하기 전에 헤더에 csrf값을 설정
+                var $token = $("#token");
+                xhr.setRequestHeader("_csrf.headerName", $token.val());
             },
             complete: function(xhr, testStatus){
                 $button.attr('disabled', false);
             },
-
             success: function (response) {
                 if (response.code == "200") {
                     // 정상 처리 된 경우

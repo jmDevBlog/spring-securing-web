@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home", "/h2-console/**", "/join", "/create").permitAll() // / 및 /home 경로는 인증이 필요하지 않음음
                 .anyRequest().authenticated()
                 .and()
-            .csrf().ignoringAntMatchers("/h2-console/**")
+            .csrf().ignoringAntMatchers("/h2-console/**","/create")
                 .and()
             .headers()
                 .addHeaderWriter(
@@ -48,9 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .logout()
-                .permitAll()
-                .and()
-            .csrf().disable();
+                .permitAll();
     }
 
     @Override

@@ -17,6 +17,7 @@
 <form name="loginForm" id="loginForm" th:action="@{/login}" method="post">
     <div><label> User Name : <input type="text" id="username" name="username"/> </label></div>
     <div><label> Password: <input type="password" id="password" name="password"/> </label></div>
+    <input type="hidden" id="token" data-token-name="${_csrf.headerName}" value="${_csrf.token}">
     <div><button type="submit" />Sigh In</div>
 </form>
 </body>
