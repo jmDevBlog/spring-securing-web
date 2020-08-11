@@ -2,7 +2,6 @@ $(document).ready(function($){
     $('#loginForm').submit(function (event) {
         event.preventDefault();
         var $form = $(this);
-
         var $button = $form.find('button');
 
         $.ajax({
@@ -13,9 +12,6 @@ $(document).ready(function($){
 
             beforeSend: function(xhr, setting){
                 $button.attr('disabled', true);
-                //데이터를 전송하기 전에 헤더에 csrf값을 설정
-                var $token = $("#token");
-                xhr.setRequestHeader("_csrf.headerName", $token.val());
             },
             complete: function(xhr, testStatus){
                 $button.attr('disabled', false);
