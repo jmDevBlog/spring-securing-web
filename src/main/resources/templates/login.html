@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head>
     <title>Spring Security Example </title>
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script type="text/javascript" src="/js/login.js"></script>
 </head>
-<body>
 
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        if (window.jQuery) {
+            $(document).ajaxSend(function (e, jqxhr) {
+                jqxhr.setRequestHeader(/*[[${_csrf.headerName}]]*/ 'csrf-name', /*[[${_csrf.token}]]*/ 'csrf-value');
+            });
+        }
+    });
+</script>
+<body>
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
@@ -19,5 +29,6 @@
     <div><label> Password: <input type="password" id="password" name="password"/> </label></div>
     <div><button type="submit" />Sigh In</div>
 </form>
+
 </body>
 </html>

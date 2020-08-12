@@ -2,7 +2,6 @@ $(document).ready(function($){
     $('#loginForm').submit(function (event) {
         event.preventDefault();
         var $form = $(this);
-
         var $button = $form.find('button');
 
         $.ajax({
@@ -17,7 +16,6 @@ $(document).ready(function($){
             complete: function(xhr, testStatus){
                 $button.attr('disabled', false);
             },
-
             success: function (response) {
                 if (response.code == "200") {
                     // 정상 처리 된 경우
